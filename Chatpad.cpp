@@ -37,8 +37,14 @@ void Chatpad::run(){
   
   if(m_serialstream->available() >= 8){
     m_serialstream->readBytes(m_buffer, 8);
-    chatpad_onBufferUpdate(m_buffer);
-    if(m_buffer[0] == 0xB4) buffer_evaluate();
+    if((m_buffer[0] != 0xB4) && (m_buffer[0] != 0xA5)){
+		chatpad_fix_stream();
+		return;
+	}
+    if(m_buffer[0] == 0xB4){
+		chatpad_onBufferUpdate(m_buffer);
+		buffer_evaluate();
+	}
   }
 }
 
@@ -93,6 +99,16 @@ void Chatpad::chatpad_onBufferUpdate(uint8_t buf[8]){
   if(handler_onBufferUpdate) handler_onBufferUpdate(buf);
 }
 
+void Chatpad::chatpad_fix_stream(){
+	for(int i = 1; i < 8; i++){
+		if((m_buffer[i] == 0xB4) || (m_buffer[i] == 0xA5)){
+			while(m_serialstream->available() < i);
+			m_serialstream->readBytes(m_buffer, i);
+			break;
+		}
+	}
+}
+
 void Chatpad::chatpad_init(){
   m_serialstream->write(0x87);
   m_serialstream->write(0x02);
@@ -112,7 +128,7 @@ void Chatpad::chatpad_keep_awake(){
 }
 
 char Chatpad::chatpad_to_char(uint8_t chatpad_byte, uint8_t modifier){
-  char c = 0;
+  uint8_t c = 0;
   switch(chatpad_byte){
     case 0x65: return '0';
     case 0x17: return '1';
@@ -151,19 +167,62 @@ char Chatpad::chatpad_to_char(uint8_t chatpad_byte, uint8_t modifier){
     case 0x22: c = 'y'; break;
     case 0x46: c = 'z'; break;
     case 0x54: return ' ';
-    case 0x62: return ',';
-    case 0x53: return '.';
-    default:   return 0;
+    case 0x62: c = ','; break;
+    case 0x53: c = '.'; break;
+    case 0x71: return KEY_BACKSPACE;
+    case 0x51: c = KEY_RIGHT_ARROW; break;
+    case 0x55: c = KEY_LEFT_ARROW; break;
+    default: return 0;
   }
   
-  /*
-    00000001 -> shift
-    00000010 -> left ctrl
-    00000100 -> right ctrl
-    00001000 -> messenger
-  */
-  if(modifier & 1 && c >= 'a' && c <= 'z')
-    c -= 32;
+  if(modifier & MODIFIER_SHIFT){
+    if(c >= 'a' && c <= 'z') return c-32;
+    switch(c){
+      case KEY_RIGHT_ARROW: return KEY_DOWN_ARROW;
+      case KEY_LEFT_ARROW: return KEY_UP_ARROW;
+    }
+  }
+  
+  if(modifier & MODIFIER_LEFTCTRL){
+	  switch(c){
+		  case 'q': return '!';
+		  case 'w': return '@';
+		  case 'r': return '#';
+		  case 't': return '%';
+		  case 'y': return '^';
+		  case 'u': return '&';
+		  case 'i': return '*';
+		  case 'o': return '(';
+		  case 'p': return ')';
+		  case 'a': return '~';
+		  case 'd': return '{';
+		  case 'f': return '}';
+		  case 'h': return '/';
+		  case 'j': return '\'';
+		  case 'k': return '[';
+		  case 'l': return ']';
+		  case ',': return ':';
+		  case 'z': return '`';
+		  case 'v': return '-';
+		  case 'b': return '|';
+		  case 'n': return '<';
+		  case 'm': return '>';
+		  case '.': return '?';
+	  }
+  }
+
+  if(modifier & MODIFIER_RIGHTCTRL){
+	  switch(c){
+		  case 'r': return '$';
+		  case 'p': return '=';
+		  case 'h': return '\\';
+		  case 'j': return '"';
+		  case ',': return ';';
+		  case 'v': return '_';
+		  case 'b': return '+';
+	  }
+  }
+  
   return c;
 }
 

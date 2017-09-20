@@ -4,6 +4,19 @@
 #include "Arduino.h"
 #include <SeqTimer.h>
 
+const uint8_t MODIFIER_SHIFT 		= 0b0001;
+const uint8_t MODIFIER_LEFTCTRL 	= 0b0010;
+const uint8_t MODIFIER_RIGHTCTRL 	= 0b0100;
+const uint8_t MODIFIER_MESSENGER 	= 0b1000;
+
+//from arduino's Keyboard.h
+
+#define KEY_UP_ARROW    0xDA
+#define KEY_DOWN_ARROW    0xD9
+#define KEY_LEFT_ARROW    0xD8
+#define KEY_RIGHT_ARROW   0xD7
+#define KEY_BACKSPACE   0xB2
+
 class Chatpad{
   public:
     Chatpad();
@@ -33,7 +46,8 @@ class Chatpad{
     void chatpad_onPress(char key);
     void chatpad_onRelease(char key);
     void chatpad_onBufferUpdate(uint8_t buf[8]);
-    
+
+    void chatpad_fix_stream();
     void chatpad_init(); 
     void chatpad_keep_awake();
 
