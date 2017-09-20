@@ -21,7 +21,10 @@ AltSoftSerial chatpadSerial;// Serial connection to the chatpad
 
 void setup(){
   Serial.begin(9600); //USB Serial for printing to Serial Monitor
-  chatpadSerial.begin(19200); // always 19200 for the chatpadSerial, cannot be moved into chatpad class since that takes a stream object and all streams shall be supported
+  
+  //can be replaced with one of the hardware serials
+  //cannot be moved into chatpad class since that takes a stream object and all streams shall be supported
+  chatpadSerial.begin(19200); // always 19200 for the chatpadSerial
   chatpad.Init(chatpadSerial, onPress, onRelease);
 }
 
