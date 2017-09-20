@@ -1,0 +1,30 @@
+########################################
+# Syntax Coloring Map For
+# ExampleLibrary
+#
+# Fields (Data Members) - KEYWORD2
+# Methods (Member Functions)
+#  - FUNCTION2 (or KEYWORD2)
+# Constants - LITERAL2
+# Datatypes - KEYWORD5 (or KEYWORD1)
+########################################
+
+########################################
+# Datatypes (KEYWORD5 or KEYWORD1)
+########################################
+
+ExampleLibrary                  KEYWORD1
+
+########################################
+# Methods and Functions
+#   (FUNCTION2 or KEYWORD2)
+########################################
+
+doThatThing                     KEYWORD2
+
+########################################
+# Constants (LITERAL2)
+########################################
+
+FORWARD                         LITERAL2
+BACKWARD                        LITERAL2
