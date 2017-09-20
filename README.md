@@ -6,7 +6,9 @@ Chatpad
 A [Arduino](https://en.wikipedia.org/wiki/Arduino)/[Wiring](https://en.wikipedia.org/wiki/Wiring_(development_platform)) library for connectiong to Microsoft's XBOX chatpad.
 
 This library does NOT work in conjunction with SoftwareSerial, since that does not support simultaneous sending and receiving.
+
 It does however work work with [AltSoftSerial by PaulStoffregen](https://github.com/PaulStoffregen/AltSoftSerial).
+
 [SMFSW's SeqTimer](https://github.com/SMFSW/SeqTimer) is needed to compile this library.
 
 ## Example
