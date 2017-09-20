@@ -16,6 +16,7 @@ const uint8_t MODIFIER_MESSENGER 	= 0b1000;
 #define KEY_LEFT_ARROW    0xD8
 #define KEY_RIGHT_ARROW   0xD7
 #define KEY_BACKSPACE   0xB2
+#define KEY_RETURN      0xB0
 
 class Chatpad{
   public:

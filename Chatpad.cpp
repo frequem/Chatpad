@@ -172,6 +172,7 @@ char Chatpad::chatpad_to_char(uint8_t chatpad_byte, uint8_t modifier){
     case 0x71: return KEY_BACKSPACE;
     case 0x51: c = KEY_RIGHT_ARROW; break;
     case 0x55: c = KEY_LEFT_ARROW; break;
+    case 0x63: return KEY_RETURN;
     default: return 0;
   }
   
